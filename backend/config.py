@@ -14,7 +14,6 @@ class Settings(BaseSettings):
 
     # ─── Supabase ───
     SUPABASE_URL: str
-    SUPABASE_KEY: str
     SUPABASE_SERVICE_KEY: str
 
     # ─── App ───
