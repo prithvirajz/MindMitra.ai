@@ -129,7 +129,58 @@ async def get_ai_response(
         )
     except Exception as e:
         print(f"❌ Unexpected error in LLM call: {e}")
-        return (
-            "Something went wrong on my end, but your feelings matter. "
-            "Please try again, and I'll be right here. 💙"
-        )
+async def classify_emotion(text: str) -> tuple[str, float]:
+    """
+    Classify the emotion of a text using the LLM (lightweight alternative to local BERT).
+    
+    Args:
+        text: User message
+        
+    Returns:
+        tuple: (emotion_label, confidence_score)
+    """
+    prompt = (
+        f"Classify the emotion of this text into exactly one of these labels: "
+        f"anger, disgust, fear, joy, neutral, sadness, surprise.\n"
+        f"Text: \"{text}\"\n"
+        f"Reply ONLY with the label."
+    )
+    
+    headers = {
+        "Authorization": f"Bearer {settings.OPENROUTER_API_KEY}",
+        "Content-Type": "application/json",
+        "HTTP-Referer": settings.FRONTEND_URL,
+        "X-Title": "MindMitra Emotion Classifier",
+    }
+    
+    payload = {
+        "model": "mistralai/mistral-7b-instruct",
+        "messages": [{"role": "user", "content": prompt}],
+        "max_tokens": 10,
+        "temperature": 0.1,  # Deterministic
+    }
+    
+    try:
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            response = await client.post(
+                OPENROUTER_URL,
+                headers=headers,
+                json=payload
+            )
+            response.raise_for_status()
+            data = response.json()
+            label = data["choices"][0]["message"]["content"].strip().lower()
+            
+            # clean up punctuation
+            import re
+            label = re.sub(r'[^a-z]', '', label)
+            
+            valid_labels = ["anger", "disgust", "fear", "joy", "neutral", "sadness", "surprise"]
+            if label not in valid_labels:
+                return "neutral", 0.5
+                
+            return label, 0.9  # Mock confidence since LLM doesn't give it easily
+            
+    except Exception as e:
+        print(f"⚠️ Emotion classification failed: {e}")
+        return "neutral", 0.0

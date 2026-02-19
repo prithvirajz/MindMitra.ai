@@ -55,7 +55,7 @@ async def chat(request: ChatRequest):
     
     try:
         # ── Step 1: Detect emotion ──
-        emotion_label, confidence = detect_emotion(message)
+        emotion_label, confidence = await detect_emotion(message)
         
         # ── Step 2: Check for crisis ──
         is_crisis, crisis_message = detect_crisis(
