@@ -1,0 +1,30 @@
+# ─── Dependencies ───
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# ─── Environment ───
+.env
+.env.local
+.env.production
+
+# ─── Build Output ───
+.next/
+out/
+dist/
+build/
+
+# ─── IDE ───
+.vscode/
+.idea/
+
+# ─── OS ───
+.DS_Store
+Thumbs.db
+
+# ─── HuggingFace Model Cache ───
+# (the model is large, don't commit it)
+*.bin
+*.safetensors
