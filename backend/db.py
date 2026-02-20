@@ -11,6 +11,7 @@ Handles all database operations:
   - Fetching recent chats for conversation memory
 """
 
+
 import httpx
 from datetime import datetime, timedelta
 from config import settings
