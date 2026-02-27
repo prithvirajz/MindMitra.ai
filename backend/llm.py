@@ -15,7 +15,6 @@ from config import settings
 
 # ─── OpenRouter Configuration ───────────────────────────────────
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
-DEFAULT_MODEL = "mistralai/mistral-7b-instruct"
 
 # ─── System Prompt ──────────────────────────────────────────────
 # This prompt defines MindMitra's personality and ethical boundaries.
@@ -90,7 +89,7 @@ async def get_ai_response(
     }
     
     payload = {
-        "model": DEFAULT_MODEL,
+        "model": settings.OPENROUTER_MODEL,
         "messages": messages,
         "max_tokens": 500,
         "temperature": 0.7,         # Balanced creativity
@@ -154,7 +153,7 @@ async def classify_emotion(text: str) -> tuple[str, float]:
     }
     
     payload = {
-        "model": "mistralai/mistral-7b-instruct",
+        "model": settings.OPENROUTER_MODEL,
         "messages": [{"role": "user", "content": prompt}],
         "max_tokens": 10,
         "temperature": 0.1,  # Deterministic

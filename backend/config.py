@@ -11,6 +11,7 @@ from pydantic_settings import BaseSettings
 class Settings(BaseSettings):
     # ─── OpenRouter ───
     OPENROUTER_API_KEY: str
+    OPENROUTER_MODEL: str = "mistralai/mistral-7b-instruct"
 
     # ─── Supabase ───
     SUPABASE_URL: str
